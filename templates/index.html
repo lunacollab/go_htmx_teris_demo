@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Tetris with Go + htmx</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .board-container {
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 25px;
+            height: 25px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .cell-empty {
+            background-color: white;
+        }
+        .cell-locked {
+            background-color: #555;
+        }
+        .cell-active {
+            background-color: red;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tetris (Go + htmx Demo)</h1>
+
+    <!-- Khu vực hiển thị board -->
+    <div id="board" class="board-container"
+        hx-get="/move?action=none" 
+        hx-trigger="load" 
+        hx-target="#board">
+    </div>
+
+    <div class="controls">
+        <p>Nhấn các phím mũi tên để di chuyển, phím mũi tên lên để xoay khối.</p>
+        <button 
+            hx-post="/move?action=left" 
+            hx-target="#board" 
+            hx-swap="innerHTML">Left</button>
+
+        <button 
+            hx-post="/move?action=right" 
+            hx-target="#board" 
+            hx-swap="innerHTML">Right</button>
+
+        <button 
+            hx-post="/move?action=down" 
+            hx-target="#board" 
+            hx-swap="innerHTML">Down</button>
+
+        <button 
+            hx-post="/move?action=rotate" 
+            hx-target="#board" 
+            hx-swap="innerHTML">Rotate</button>
+    </div>
+
+    <script>
+    document.addEventListener('keydown', function(e) {
+        let action = null;
+        if(e.key === 'ArrowLeft') {
+            action = 'left';
+        } else if(e.key === 'ArrowRight') {
+            action = 'right';
+        } else if(e.key === 'ArrowDown') {
+            action = 'down';
+        } else if(e.key === 'ArrowUp') {
+            action = 'rotate';
+        }
+
+        if(action) {
+            e.preventDefault();
+            htmx.ajax('POST', '/move?action=' + action, {target: "#board", swap: "innerHTML"});
+        }
+    });
+
+
+    setInterval(function() {
+        htmx.ajax('POST', '/move?action=down', {target: "#board", swap: "innerHTML"});
+    }, 1000);
+    </script>
+</body>
+</html>

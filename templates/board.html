@@ -1,0 +1,16 @@
+{{ $board := . }}
+<div>
+    {{ range $rowIndex, $row := $board }}
+    <div style="white-space: nowrap;">
+        {{ range $colIndex, $val := $row }}
+        {{ if eq $val 0 }}
+        <span class="cell cell-empty"></span>
+        {{ else if eq $val 1 }}
+        <span class="cell cell-locked"></span>
+        {{ else if eq $val 2 }}
+        <span class="cell cell-active"></span>
+        {{ end }}
+        {{ end }}
+    </div>
+    {{ end }}
+</div>
