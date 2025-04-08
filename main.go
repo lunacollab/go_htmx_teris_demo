@@ -11,8 +11,7 @@ import (
     "time"
 )
 
-// Chúng ta nhúng toàn bộ thư mục templates để render
-//go:embed templates
+
 var templatesFS embed.FS
 
 var tplIndex *template.Template
@@ -23,21 +22,21 @@ const (
     Columns = 10
 )
 
-// Cấu trúc lưu trạng thái game Tetris
+
 type TetrisGame struct {
-    Board       [][]int // 0 = trống, >0 = có khối
+    Board       [][]int 
     CurrentTet  *Tetromino
     Lock        sync.Mutex
 }
 
-// Cấu trúc một khối (Tetromino)
+
 type Tetromino struct {
-    Shape [][]int // Ma trận shape 4x4 (hoặc 3x3), 1 = có ô, 0 = trống
-    Row   int     // Vị trí hàng hiện tại
-    Col   int     // Vị trí cột hiện tại
+    Shape [][]int 
+    Row   int   
+    Col   int    
 }
 
-// Tạo game mới
+
 func NewTetrisGame() *TetrisGame {
     g := &TetrisGame{
         Board: make([][]int, Rows),
